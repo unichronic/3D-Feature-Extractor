@@ -15,8 +15,6 @@ A desktop application for loading 3D models, extracting features using machine l
 - **Gesture Control**: Control the camera view using hand gestures via webcam
 - **Customizable Lighting**: Adjust ambient and diffuse lighting to improve visualization
 
-## Requirements
-
 ## Installation
 
 1. Clone this repository: 
