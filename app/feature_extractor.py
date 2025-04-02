@@ -14,16 +14,13 @@ class FeatureExtractor:
         """
         Extract curvature features from the model
         """
-        # Create the curvature filter
         curvature = vtk.vtkCurvatures()
         curvature.SetInputData(polydata)
         curvature.SetCurvatureTypeToMean()
         curvature.Update()
         
-        # Get the curvature data
         curv_data = curvature.GetOutput().GetPointData().GetScalars()
         
-        # Convert to numpy array
         curv_array = np.zeros(curv_data.GetNumberOfTuples())
         for i in range(curv_data.GetNumberOfTuples()):
             curv_array[i] = curv_data.GetTuple1(i)
@@ -34,11 +31,9 @@ class FeatureExtractor:
         """
         Cluster points by their position using KMeans
         """
-        # Standardize the data
         scaler = StandardScaler()
         points_std = scaler.fit_transform(points)
         
-        # Apply KMeans clustering
         kmeans = KMeans(n_clusters=n_clusters, random_state=42)
         self.labels = kmeans.fit_predict(points_std)
         
@@ -48,17 +43,13 @@ class FeatureExtractor:
         """
         Cluster points by their curvature using KMeans
         """
-        # Extract curvature
         curvature = self.extract_curvature(polydata)
         
-        # Combine position and curvature
         features = np.column_stack((points, curvature.reshape(-1, 1)))
         
-        # Standardize the data
         scaler = StandardScaler()
         features_std = scaler.fit_transform(features)
         
-        # Apply KMeans clustering
         kmeans = KMeans(n_clusters=n_clusters, random_state=42)
         self.labels = kmeans.fit_predict(features_std)
         
@@ -68,13 +59,34 @@ class FeatureExtractor:
         """
         Find edges in the model based on curvature
         """
-        # Extract curvature
         curvature = self.extract_curvature(polydata)
-        
-        # Normalize curvature
-        curvature_norm = (curvature - np.min(curvature)) / (np.max(curvature) - np.min(curvature))
-        
-        # Classify points as edge or non-edge
-        self.labels = np.where(curvature_norm > edge_threshold, 1, 0)
-        
+
+        min_curv = np.min(curvature)
+        max_curv = np.max(curvature)
+        delta_curv = max_curv - min_curv
+
+        if delta_curv < 1e-6:
+            print("Warning: Curvature is effectively constant across the model. Cannot perform edge detection.")
+            self.labels = np.zeros(points.shape[0], dtype=int)
+        else:
+            curvature_norm = (curvature - min_curv) / delta_curv
+            self.labels = np.where(curvature_norm > edge_threshold, 1, 0)
+            print(f"Edge detection complete. Found {np.sum(self.labels)} edge points.")
+
         return self.labels 
+
+    def simulate_deformation(self, original_points, time_step):
+        """
+        Applies a simple, predefined deformation based on a time step.
+        This is a placeholder for a real ML prediction for MVP purposes.
+        Example: Simple scaling/pulsing along the Z-axis.
+        """
+        if original_points is None:
+            return None
+
+        deformed_points = original_points.copy()
+        scale_factor = 1.0 + 0.1 * np.sin(time_step * 0.1)
+        
+        deformed_points[:, 2] = original_points[:, 2] * scale_factor 
+        
+        return deformed_points 
