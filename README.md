@@ -62,7 +62,7 @@ python main.py
 #### Connectivity Segmentation
 
 1. Click "Segment by Connectivity" to analyze and visualize separate connected components
-   - Each disconnected component will be displayed in a distinct color
+   - Each disconnected component will be displayed in a distinct color (can result in some fun patterns!)
    - Useful for identifying separate parts in assemblies or checking model integrity
 
 #### Clipping Plane
@@ -75,9 +75,6 @@ python main.py
 ### Gesture Control
 
 1. Click "Start Gesture Control" to enable camera-based hand gesture control
-   - Requires a webcam and sufficient lighting
-   - A camera preview window will open showing hand tracking
-
 2. Use the following gestures:
    - **Pinching**: Pinch your thumb and index finger together to zoom
      - Moving fingers closer/further apart controls zoom level
@@ -93,9 +90,8 @@ python main.py
 
 ### Lighting Control
 
-1. Adjust the light settings using the sliders in the Lighting Controls section:
+Adjust the light settings using the sliders in the Lighting Controls section:
    - **Ambient**: Controls the overall base light level (0-100%)
    - **Diffuse**: Controls directional light intensity (0-100%)
 
-2. Changes to lighting are applied immediately to improve model visualization
 
