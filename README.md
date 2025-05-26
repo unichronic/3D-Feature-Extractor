@@ -19,7 +19,7 @@ A desktop application for loading 3D models, extracting features using machine l
 
 1. Clone this repository: 
 ```
-https://github.com/unichronic/Feature-Extractor.git
+https://github.com/unichronic/3D-Feature-Extractor.git
 ```
 2. Install the required dependencies:
 
